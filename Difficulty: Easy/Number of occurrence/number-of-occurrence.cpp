@@ -10,13 +10,21 @@ class Solution {
   public:
     int countFreq(vector<int>& arr, int target) {
         // code here
-        map<int,int>mp;
-        for(int i=0;i<arr.size();i++){
-            mp[arr[i]]++;
-        }
-        for(int i=0;i<mp.size();i++){
-            if(mp.find(target)!=mp.end()){
-                return mp[target];
+        int i=0;
+        int j=arr.size();
+        while(i<=j){
+            if(arr[j]!=target&&arr[i]!=target){
+                i++;
+                j--;
+            }
+            else if(arr[i]==target&&arr[j]!=target){
+                j--;
+            }
+            else if(arr[j]==target&&arr[i]!=target){
+               i++;
+            }
+            else if(arr[i]==target&&arr[j]==target){
+                return j-i+1;
             }
         }
         return 0;
