@@ -7,47 +7,38 @@ using namespace std;
 
 class Solution {
   public:
-  bool solve(int s,vector<vector<int>> edges,vector<int>&vis){
-      vis[s]=1;
-      //{node , parent}
-      queue<pair<int,int>>que;
-      que.push({s,-1});
-      while(!que.empty()){
-          int node=que.front().first;
-          int parent=que.front().second;
-          que.pop();
-          for(auto nodes: edges[node]){
-              if(!vis[nodes]){
-                  vis[nodes]=1;
-                  que.push({nodes,node});
-              }
-              else if( nodes != parent){
-                  return true ;
-              }
-          }
-      }
-      return false;
-  }
-    bool isCycle(int V, vector<vector<int>>& edges) {
-        // Code here
-        vector<vector<int>> adj(V);
+  bool solve(int node, int parent, vector<vector<int>>& adj, vector<int>& vis) {
+    vis[node] = 1;
+    for (auto adja : adj[node]) {
+        if (!vis[adja]) {
+            if (solve(adja, node, adj, vis)) {
+                return true;
+            }
+        } else if (adja != parent) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool isCycle(int V, vector<vector<int>>& edges) {
+    vector<vector<int>> adj(V);
     for (auto& edge : edges) {
         int u = edge[0], v = edge[1];
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
-        
-        
-        vector<int>vis(V,0);
-        for(int i=0;i<V;i++){
-            if(!vis[i]){
-            if( solve(i,adj,vis)){
+
+    vector<int> vis(V, 0);
+    for (int i = 0; i < V; i++) {
+        if (!vis[i]) {
+            if (solve(i, -1, adj, vis)) {
                 return true;
             }
-            }
         }
-        return false;
     }
+    return false;
+}
 };
 
 
